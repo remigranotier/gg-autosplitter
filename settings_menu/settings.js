@@ -22,4 +22,5 @@ function restoreOptions() {
 }
 
 document.addEventListener("DOMContentLoaded", restoreOptions);
+console.log(document.querySelector("form"));
 document.querySelector("form").addEventListener("submit", saveOptions);

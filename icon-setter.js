@@ -37,7 +37,7 @@ browser.tabs.onUpdated.addListener((_tabId, _changeInfo, tab) => {
 
 function handleExtensionActiveState(tabs) {
     if (tabs.tabId) {
-        browser.tabs.get(tabs.tabId, (tab) => {
+        browser.tabs.get(tabs.tabId).then((tab) => {
             checkWhiteListedOrigin(tab);
         });
     } else {
