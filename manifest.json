@@ -12,15 +12,17 @@
                 "*://*.geoguessr.com/*"
             ],
             "js": [
+                "polyfill/browser-polyfill.js",
                 "split.js"
             ]
         }
     ],
     "background": {
         "scripts": [
+            "polyfill/browser-polyfill.js",
             "icon-setter.js"
         ],
-        "type": "module"
+        "service_worker": "worker-wrapper.js"
     },
     "action": {
         "default_icon": "icons/logo-48.png",
