@@ -9,7 +9,7 @@
     "content_scripts": [
         {
             "matches": [
-                "*://*.geoguessr.com/challenge/*"
+                "*://*.geoguessr.com/*"
             ],
             "js": [
                 "split.js"

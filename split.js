@@ -1,13 +1,15 @@
+let ws = new WebSocket("ws://localhost:16834/livesplit");
+
 function split() {
-    console.log("split")
+    ws.send("split");
 }
 
 function start() {
-    console.log("starttimer");
+    ws.send("starttimer");
 }
 
 document.addEventListener('click', function (e) {
-    if (e.target && e.target.dataset.qa == 'join-challenge-button') {
+    if (e.target && e.target.dataset.qa == 'join-challenge-button' || e.target.dataset.qa == 'start-challenge-button') {
         start()
     }
     if (e.target && e.target.dataset.qa == 'perform-guess') {
