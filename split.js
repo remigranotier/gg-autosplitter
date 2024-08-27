@@ -34,6 +34,7 @@ function onReceivedSettings(item) {
 
 function split() {
     if (ws.readyState == WebSocket.OPEN) {
+        console.debug("Sending 'split'");
         ws.send("split");
     } else {
         console.error("Could not send 'split' message, web socket is not ready")
@@ -42,17 +43,20 @@ function split() {
 
 function start() {
     if (ws.readyState == WebSocket.OPEN) {
+        console.debug("Sending 'starttimer'");
         ws.send("starttimer");
     } else {
         console.error("Could not send 'starttimer' message, web socket is not ready")
     }
 }
 
+let start_list = ['join-challenge-button', 'start-challenge-button', 'start-game-button', 'play-again-button'];
+let split_list = ['perform-guess'];
 document.addEventListener('click', function (e) {
-    if (e.target && e.target.dataset.qa == 'join-challenge-button' || e.target.dataset.qa == 'start-challenge-button') {
+    if (e.target && start_list.includes(e.target.dataset.qa)) {
         start()
     }
-    if (e.target && e.target.dataset.qa == 'perform-guess') {
+    if (e.target && split_list.includes(e.target.dataset.qa)) {
         split()
     }
 });
@@ -63,6 +67,10 @@ document.body.onkeyup = function (e) {
         e.keyCode == 32
     ) {
         let guess_button = document.querySelector("button[data-qa='perform-guess']");
+        if (!guess_button) {
+            console.debug("Spacebar pressed with no guess button, ignoring");
+            return;
+        }
         if (!guess_button.disabled) {
             split();
         }
