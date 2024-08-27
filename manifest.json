@@ -1,0 +1,19 @@
+{
+    "manifest_version": 2,
+    "name": "GeoGuessr Autosplitter",
+    "version": "1.0",
+    "description": "Sends command to LiveSplit server",
+    "icons": {
+        "48": "icons/border-48.png"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*.geoguessr.com/challenge/*"
+            ],
+            "js": [
+                "split.js"
+            ]
+        }
+    ]
+}
