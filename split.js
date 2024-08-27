@@ -1,11 +1,51 @@
-let ws = new WebSocket("ws://localhost:16834/livesplit");
+// Load settings
+const settings = browser.storage.sync.get()
+settings.then(onReceivedSettings, onErrorReceivingSettings);
+var options = {};
+var ws;
+
+function onErrorReceivingSettings(error) {
+    console.log(`Error while retrieving settings: ${error}`);
+}
+
+function onReceivedSettings(item) {
+    let port = "16834";
+    if (item.port) {
+        port = item.port;
+    }
+    options.port = port
+
+    // Initialize websocket
+    ws = new WebSocket("ws://localhost:" + options.port + "/livesplit");
+    ws.onopen = function (e) {
+        browser.runtime.sendMessage({ status: ws.readyState })
+    }
+    ws.onclose = function (e) {
+        browser.runtime.sendMessage({ status: ws.readyState })
+    }
+    ws.onerror = function (e) {
+        browser.runtime.sendMessage({ status: ws.readyState })
+    }
+    ws.onmessage = function (e) {
+        browser.runtime.sendMessage({ status: ws.readyState })
+    }
+}
+
 
 function split() {
-    ws.send("split");
+    if (ws.readyState == WebSocket.OPEN) {
+        ws.send("split");
+    } else {
+        console.error("Could not send 'split' message, web socket is not ready")
+    }
 }
 
 function start() {
-    ws.send("starttimer");
+    if (ws.readyState == WebSocket.OPEN) {
+        ws.send("starttimer");
+    } else {
+        console.error("Could not send 'starttimer' message, web socket is not ready")
+    }
 }
 
 document.addEventListener('click', function (e) {
