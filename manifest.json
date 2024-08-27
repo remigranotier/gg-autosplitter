@@ -12,14 +12,14 @@
                 "*://*.geoguessr.com/*"
             ],
             "js": [
-                "polyfill/browser-polyfill.js",
+                "settings_menu/browser-polyfill.js",
                 "split.js"
             ]
         }
     ],
     "background": {
         "scripts": [
-            "polyfill/browser-polyfill.js",
+            "settings_menu/browser-polyfill.js",
             "icon-setter.js"
         ],
         "service_worker": "worker-wrapper.js"
