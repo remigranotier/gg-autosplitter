@@ -31,36 +31,47 @@ function onReceivedSettings(item) {
     }
 }
 
-
-function split() {
+function send_ws(operation) {
     if (ws.readyState == WebSocket.OPEN) {
-        console.debug("Sending 'split'");
-        ws.send("split");
+        console.debug("Sending '" + operation + "'");
+        ws.send(operation);
     } else {
-        console.error("Could not send 'split' message, web socket is not ready")
+        console.error("Could not send '" + operation + "' message, web socket is not ready")
     }
 }
 
 function start() {
-    if (ws.readyState == WebSocket.OPEN) {
-        console.debug("Sending 'starttimer'");
-        ws.send("starttimer");
-    } else {
-        console.error("Could not send 'starttimer' message, web socket is not ready")
-    }
+    send_ws("start");
+    send_ws("unpausegametime"); // For a second seed, game time might be paused
+}
+
+function guess() {
+    send_ws("pausegametime");
+    send_ws("split");
+}
+
+function next() {
+    send_ws("unpausegametime");
 }
 
 let start_list = ['join-challenge-button', 'start-challenge-button', 'start-game-button', 'play-again-button'];
-let split_list = ['perform-guess'];
+let guess_list = ['perform-guess'];
+let next_list = ['close-round-result'];
+
+// Event button listener
 document.addEventListener('click', function (e) {
     if (e.target && start_list.includes(e.target.dataset.qa)) {
-        start()
+        start();
     }
-    if (e.target && split_list.includes(e.target.dataset.qa)) {
-        split()
+    if (e.target && guess_list.includes(e.target.dataset.qa)) {
+        guess();
+    }
+    if (e.target && next_list.includes(e.target.dataset.qa) && e.target.textContent == "Next") {
+        next()
     }
 });
 
+// Space bar listener
 document.body.onkeyup = function (e) {
     if (e.key == " " ||
         e.code == "Space" ||
@@ -72,7 +83,7 @@ document.body.onkeyup = function (e) {
             return;
         }
         if (!guess_button.disabled) {
-            split();
+            guess();
         }
     }
 }
