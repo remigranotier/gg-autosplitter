@@ -8,15 +8,24 @@ function onErrorReceivingSettings(error) {
     console.log(`Error while retrieving settings: ${error}`);
 }
 
+// Set current options
 function onReceivedSettings(item) {
-    let port = "16834";
+    let port = 16834;
     if (item.port) {
         port = item.port;
     }
-    options.port = port
+    options.port = port;
 
-    // Initialize websocket
-    ws = new WebSocket("ws://localhost:" + options.port + "/livesplit");
+    initialize_ws();
+}
+
+// Initialize websocket
+function init_ws() {
+    if (!Number.isInteger(options.port)) {
+        console.error("'port' setting is invalid, please provide a valid number");
+    }
+
+    ws = new WebSocket(`ws://localhost:${options.port}/livesplit`);
     ws.onopen = function (e) {
         browser.runtime.sendMessage({ status: ws.readyState })
     }
@@ -31,12 +40,13 @@ function onReceivedSettings(item) {
     }
 }
 
+// Send message through websocket
 function send_ws(operation) {
     if (ws.readyState == WebSocket.OPEN) {
-        console.debug("Sending '" + operation + "'");
+        console.debug(`Sending'${operation}'`);
         ws.send(operation);
     } else {
-        console.error("Could not send '" + operation + "' message, web socket is not ready")
+        console.error(`Could not send '${operation}' message, web socket is not ready`)
     }
 }
 

@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "GeoGuessr Autosplitter",
     "version": "0.1.0",
-    "description": "Sends command to LiveSplit server",
+    "description": "Geoguessr Autosplitter is a browser extension which connects to a local LiveSplit Server using WebSockets to perform automatic actions (starting run, splitting, pausing game time, etc.)",
     "icons": {
         "48": "icons/logo-48.png"
     },

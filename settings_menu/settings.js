@@ -10,7 +10,7 @@ function saveOptions(e) {
 function restoreOptions() {
     function setCurrentSettings(result) {
         console.log(result)
-        document.querySelector("#port").value = result.port || "16834";
+        document.querySelector("#port").value = result.port || 16834;
     }
 
     function onError(error) {
