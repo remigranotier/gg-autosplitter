@@ -46,7 +46,7 @@ function handleExtensionActiveState(tabs) {
 }
 
 function checkWhiteListedOrigin(tab) {
-    const tabUrl = new URL(tab.url);
+    const tabUrl = new URL(tab.url || "about:blank");
     if (contentScriptMatchArray.includes(tabUrl.origin)) {
         activated_extension = true;
     } else {

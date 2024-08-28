@@ -16,7 +16,7 @@ function onReceivedSettings(item) {
     }
     options.port = port;
 
-    initialize_ws();
+    init_ws();
 }
 
 // Initialize websocket
