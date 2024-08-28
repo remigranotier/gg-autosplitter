@@ -31,7 +31,7 @@ If your timer does not start when starting a game, ensure the extension icon has
 
 - Firefox (tested)
 - Chrome (tested)
-- Edge, Opera (should work, based on Chromium)
+- Edge, Opera, Chromium (tested rapidly, should be identical to chrome)
 
 ## Reporting issues
 

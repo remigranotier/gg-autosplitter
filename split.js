@@ -11,20 +11,19 @@ function onErrorReceivingSettings(error) {
 // Set current options
 function onReceivedSettings(item) {
     let port = 16834;
-    if (item.port) {
-        port = item.port;
+    if (item.port && parseInt(item.port)) {
+        port = parseInt(item.port);
+    } else {
+        console.error("'port' setting is invalid, please provide a valid number");
     }
     options.port = port;
-
+    options.split_seed = (item.split == "seed");
+    console.log(options);
     init_ws();
 }
 
 // Initialize websocket
 function init_ws() {
-    if (!Number.isInteger(options.port)) {
-        console.error("'port' setting is invalid, please provide a valid number");
-    }
-
     ws = new WebSocket(`ws://localhost:${options.port}/livesplit`);
     ws.onopen = function (e) {
         browser.runtime.sendMessage({ status: ws.readyState })
@@ -55,9 +54,19 @@ function start() {
     send_ws("unpausegametime"); // For a second seed, game time might be paused
 }
 
+function is_last_round() {
+    return document.querySelector("div[data-qa='round-number']").textContent.includes("5 / 5");
+}
+
 function guess() {
     send_ws("pausegametime");
-    send_ws("split");
+    if (options.split_seed) {
+        if (is_last_round()) {
+            send_ws("split");
+        }
+    } else {
+        send_ws("split");
+    }
 }
 
 function next() {

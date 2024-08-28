@@ -7,10 +7,27 @@
 </head>
 
 <body>
+    <h2>GeoGuessr Autosplitter - Settings</h2>
     <form>
-        <label for="port">LiveSplit server port</label><br>
-        <input id="port" type="number" value=16834><br>
-        <button type="submit">Save</button>
+        <fieldset>
+            <legend>LiveSplit server port</legend>
+            <input id="port" type="number" value=16834>
+        </fieldset>
+        <fieldset>
+            <legend>When to split</legend>
+            <div>
+                <input type="radio" id="round" name="split" value="round" checked />
+                <label for="round">After each round</label>
+            </div>
+            <div>
+                <input type="radio" id="seed" name="split" value="seed" />
+                <label for="seed">After each seed (5 locations)</label>
+            </div>
+        </fieldset>
+        <button type="submit">Save settings</button>
+        <button type="reset">Reset defaults</button>
+        <br>
+        <div id="save-success">&#10004; Saved settings successfully</div>
     </form>
     <script type="application/javascript" src="../polyfill/browser-polyfill.js"></script>
     <script type="application/javascript" src="settings.js"></script>
