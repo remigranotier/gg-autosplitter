@@ -19,7 +19,7 @@ Note: you may pin the taskbar icon to your taskbar for easier tracking of your c
 
 Now, if you start a game or challenge, the timer should automatically start.
 
-For now, it will split automatically at each guess.
+An options tab exists if you click on the extension taskbar icon, allowing to set your livesplit port and split options.
 
 You can switch comparison to Game Time if you want, to ignore times between rounds and games.
 
