@@ -5,6 +5,7 @@ function send_ws(operation) {
 
 function start() {
     send_ws("start");
+    send_ws("set_comparison");
     send_ws("unpausegametime"); // For a second seed, game time might be paused
 }
 

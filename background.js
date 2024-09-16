@@ -37,6 +37,14 @@ function handle_livesplit_operation(command) {
             if (options.reset_leave_game) {
                 send_ws("reset");
             }
+            break;
+        case "set_comparison":
+            if (options.compare_igt) {
+                send_ws("switchto gametime");
+            } else {
+                send_ws("switchto realtime");
+            }
+            break;
         default:
             send_ws(command);
             break;
@@ -53,6 +61,7 @@ function onReceivedSettings(item) {
     }
     options.port = port;
     options.split_seed = (item.split == "seed");
+    options.compare_igt = (item.comparison == "gametime");
     options.reset_leave_game = item.reset_leave_game;
     // options.reset_missed_loc = item.reset_missed_loc;
 

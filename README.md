@@ -48,6 +48,14 @@ To report problems, please provide the version name and your console log if prob
 
 Thank you!
 
+## Generating a release
+
+Generate a release using web-ext :
+
+```
+web-ext build
+```
+
 ## Contributing
 
 For contributions feel free to fork the repository and submit pull requests. Any help will be appreciated if you wish to implement something or fix edge cases!
