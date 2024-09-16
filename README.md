@@ -28,7 +28,7 @@ Now, if you start a game or challenge, the timer should automatically start.
 
 An options tab exists if you click on the extension taskbar icon, allowing to set your livesplit port and split options.
 
-You can switch comparison to Game Time if you want, to ignore times between rounds and games.
+Default livesplit comparison is set to In Game time. The Livesplit comparison setting will set your LiveSplit comparison at run start.
 
 ### Troubleshooting
 
