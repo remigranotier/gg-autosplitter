@@ -1,52 +1,6 @@
-// Load settings
-const settings = browser.storage.sync.get()
-settings.then(onReceivedSettings, onErrorReceivingSettings);
-var options = {};
-var ws;
-
-function onErrorReceivingSettings(error) {
-    console.log(`Error while retrieving settings: ${error}`);
-}
-
-// Set current options
-function onReceivedSettings(item) {
-    let port = 16834;
-    if (item.port && parseInt(item.port)) {
-        port = parseInt(item.port);
-    } else {
-        console.error("'port' setting is invalid, please provide a valid number");
-    }
-    options.port = port;
-    options.split_seed = (item.split == "seed");
-    console.log(options);
-    init_ws();
-}
-
-// Initialize websocket
-function init_ws() {
-    ws = new WebSocket(`ws://localhost:${options.port}/livesplit`);
-    ws.onopen = function (e) {
-        browser.runtime.sendMessage({ status: ws.readyState })
-    }
-    ws.onclose = function (e) {
-        browser.runtime.sendMessage({ status: ws.readyState })
-    }
-    ws.onerror = function (e) {
-        browser.runtime.sendMessage({ status: ws.readyState })
-    }
-    ws.onmessage = function (e) {
-        browser.runtime.sendMessage({ status: ws.readyState })
-    }
-}
-
 // Send message through websocket
 function send_ws(operation) {
-    if (ws.readyState == WebSocket.OPEN) {
-        console.debug(`Sending'${operation}'`);
-        ws.send(operation);
-    } else {
-        console.error(`Could not send '${operation}' message, web socket is not ready`)
-    }
+    browser.runtime.sendMessage({ type: "livesplit_command", command: operation });
 }
 
 function start() {
@@ -60,12 +14,10 @@ function is_last_round() {
 
 function guess() {
     send_ws("pausegametime");
-    if (options.split_seed) {
-        if (is_last_round()) {
-            send_ws("split");
-        }
-    } else {
+    if (is_last_round()) {
         send_ws("split");
+    } else {
+        send_ws("split_intermediate");
     }
 }
 

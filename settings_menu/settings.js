@@ -6,6 +6,8 @@ function saveOptions(e) {
         port: port,
         split: split
     }).then(saveSuccessful, onError);
+
+    browser.runtime.sendMessage({ type: "settings_update" });
 }
 
 function saveSuccessful() {

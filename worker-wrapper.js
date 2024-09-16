@@ -1,5 +1,5 @@
 try {
-    importScripts("polyfill/browser-polyfill.js", "icon-setter.js");
+    importScripts("polyfill/browser-polyfill.js", "background.js");
 } catch (e) {
     console.log(e);
 }

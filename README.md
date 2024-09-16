@@ -8,6 +8,13 @@ Current LiveSplit release does not embed a WebSockets server yet, you may downlo
 
 ## How to use it
 
+### Store links
+
+- [https://addons.mozilla.org/fr/firefox/addon/gg-autosplitter/](Firefox)
+- [https://chromewebstore.google.com/detail/geoguessr-autosplitter/pbdmmcffhcaejcjglkoibnhimgpkmhkc](Chrome)
+
+### Once installed
+
 **Note:** The extension is only enabled on geoguessr tabs. On any other tab it will be displayed with its default logo, with no background status.
 
 Once the extension is installed :
