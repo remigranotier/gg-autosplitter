@@ -25,6 +25,10 @@ function next() {
     send_ws("unpausegametime");
 }
 
+function reset_leave_game() {
+    send_ws("reset_leave_game");
+}
+
 let start_list = ['join-challenge-button', 'start-challenge-button', 'start-game-button', 'play-again-button'];
 let guess_list = ['perform-guess'];
 let next_list = ['close-round-result'];
@@ -38,7 +42,10 @@ document.addEventListener('click', function (e) {
         guess();
     }
     if (e.target && next_list.includes(e.target.dataset.qa) && e.target.textContent == "Next") {
-        next()
+        next();
+    }
+    if (e.target && e.target.textContent == "Leave game") {
+        reset_leave_game();
     }
 });
 

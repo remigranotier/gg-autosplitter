@@ -33,6 +33,10 @@ function handle_livesplit_operation(command) {
                 send_ws("split");
             }
             break;
+        case "reset_leave_game":
+            if (options.reset_leave_game) {
+                send_ws("reset");
+            }
         default:
             send_ws(command);
             break;
@@ -49,6 +53,8 @@ function onReceivedSettings(item) {
     }
     options.port = port;
     options.split_seed = (item.split == "seed");
+    options.reset_leave_game = item.reset_leave_game;
+    // options.reset_missed_loc = item.reset_missed_loc;
 
     // Re-initialize websocket if necessary
     init_ws();
