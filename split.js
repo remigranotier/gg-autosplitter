@@ -1,3 +1,39 @@
+// Selector of score field
+const scoreFieldSelector = "[class^=round-result_pointsIndicatorWrapper]";
+
+const gameMapSelector = "[class^=game_guessMap]";
+
+// Execute this function when score field is detected
+function handleScoreAppearance(score_field) {
+    // Without a timeout we get 0 cause score is not set yet
+    setTimeout(() => {
+        score = score_field.children[0].textContent;
+        close_round_btn = document.querySelector("button[data-qa='close-round-result']").textContent;
+        if (score == "5,000") {
+            if (close_round_btn == "Next") {
+                send_ws("perfect_score_intermediate");
+            } else {
+                send_ws("perfect_score_final");
+            }
+        } else {
+            if (close_round_btn == "Next") {
+                send_ws("missed_loc_intermediate");
+            } else {
+                send_ws("missed_loc_final");
+            }
+        }
+    }, 1);
+}
+
+// Observer config
+const observer = new MutationObserver((mutationsList, observer) => {
+    const score_field = document.querySelector(scoreFieldSelector);
+    if (score_field) {
+        handleScoreAppearance(score_field);
+        observer.disconnect();
+    }
+});
+
 // Send message through websocket
 function send_ws(operation) {
     browser.runtime.sendMessage({ type: "livesplit_command", command: operation });
@@ -14,12 +50,9 @@ function is_last_round() {
 }
 
 function guess() {
+    // observe score field when guessing
+    observer.observe(document.querySelector(gameMapSelector), { subtree: true, attributes: true });
     send_ws("pausegametime");
-    if (is_last_round()) {
-        send_ws("split");
-    } else {
-        send_ws("split_intermediate");
-    }
 }
 
 function next() {

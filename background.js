@@ -28,11 +28,6 @@ function message_listener(message) {
 // Livesplit command handler
 function handle_livesplit_operation(command) {
     switch (command) {
-        case "split_intermediate":
-            if (!options.split_seed) {
-                send_ws("split");
-            }
-            break;
         case "reset_leave_game":
             if (options.reset_leave_game) {
                 send_ws("reset");
@@ -43,6 +38,28 @@ function handle_livesplit_operation(command) {
                 send_ws("switchto gametime");
             } else {
                 send_ws("switchto realtime");
+            }
+            break;
+        case "perfect_score_intermediate":
+            if (!options.split_seed) {
+                send_ws("split");
+            }
+            break;
+        case "perfect_score_final":
+            send_ws("split");
+            break;
+        case "missed_loc_intermediate":
+            if (options.reset_missed_loc) {
+                send_ws("reset");
+            } else if (!options.split_seed) {
+                send_ws("split");
+            }
+            break;
+        case "missed_loc_final":
+            if (options.reset_missed_loc) {
+                send_ws("reset");
+            } else {
+                send_ws("split");
             }
             break;
         default:
@@ -57,26 +74,36 @@ function onReceivedSettings(item) {
     if (item.port && parseInt(item.port)) {
         port = parseInt(item.port);
     } else {
-        console.error("'port' setting is invalid, please provide a valid number");
+        console.debug("'port' setting is invalid, please provide a valid number");
     }
     options.port = port;
     options.split_seed = (item.split == "seed");
     options.compare_igt = (item.comparison == "gametime");
     options.reset_leave_game = item.reset_leave_game;
-    // options.reset_missed_loc = item.reset_missed_loc;
+    options.reset_missed_loc = item.reset_missed_loc;
+    options.extension_activation = item.extension_activation;
 
-    // Re-initialize websocket if necessary
+    // Re-initialize websocket and icon if necessary
     init_ws();
+    set_icon();
 }
 
 function onErrorReceivingSettings(error) {
-    console.log(`Error while retrieving settings: ${error}`);
+    console.error(`Error while retrieving settings: ${error}`);
 }
 
 // Initialize websocket if not already existent
 function init_ws() {
+    // If extension is disabled, remove existing WS
+    if (!options.extension_activation) {
+        ws = null
+        console.debug("Geoguessr Autosplitter is disabled");
+        return;
+    }
+
+    // Else, if WS does not already exist or is in a wrong state, open it
     if (ws == null || ws.readyState != WebSocket.OPEN) {
-        console.debug("(re)initializing WS");
+        console.debug("Geoguessr Autosplitter - (Re)Initializing WS");
         ws = new WebSocket(`ws://localhost:${options.port}/livesplit`);
         ws.onopen = function (_e) {
             set_icon();
@@ -95,7 +122,7 @@ function init_ws() {
 
 // Send message through websocket
 function send_ws(operation) {
-    if (ws.readyState == WebSocket.OPEN) {
+    if (ws && ws.readyState == WebSocket.OPEN) {
         console.debug(`Sending '${operation}'`);
         ws.send(operation);
     } else {
@@ -110,13 +137,13 @@ var activated_extension = false;
 // Set icon depending on activation of extension and WebSocket status
 function set_icon() {
     // Set default icon
-    if (!activated_extension) {
+    if (ws == null || !activated_extension) {
         browser.action.setIcon({ path: "icons/logo-48.png" });
         return;
     }
 
     // If extension is activated
-    if (ws.readyState == WebSocket.OPEN) {
+    if (ws && ws.readyState == WebSocket.OPEN) {
         browser.action.setIcon({ path: "icons/connected-48.png" });
     } else {
         browser.action.setIcon({ path: "icons/disconnected-48.png" });

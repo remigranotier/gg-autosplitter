@@ -8,7 +8,20 @@
 
 <body>
     <h2>GeoGuessr Autosplitter - Settings</h2>
-    <form>
+
+    <hr class="solid">
+
+    <div id="extension-activation">
+        <label class="switch">
+            <input id="extension-enabled" type="checkbox">
+            <span class="slider round"></span>
+        </label>
+        Extension activation
+    </div>
+
+    <hr class="solid">
+
+    <form id="settings">
         <fieldset>
             <legend>LiveSplit server port</legend>
             <input id="port" type="number" value=16834>
@@ -16,49 +29,45 @@
         <fieldset>
             <legend>Livesplit comparison</legend>
             <div>
-                <input type="radio" id="gametime" name="comparison" value="gametime" checked />
+                <input type="radio" id="gametime" name="comparison" value="gametime" />
                 <label for="gametime">In Game Time</label>
             </div>
             <div>
                 <input type="radio" id="realtime" name="comparison" value="realtime" />
                 <label for="realtime">Real Time</label>
             </div>
-            <!-- <div>
-                <input type="checkbox" id="only-on-5k" value="only-on-5k" />
-                <label for="only-on-5k">Only if the round was a 5k</label>
-            </div> -->
         </fieldset>
         <fieldset>
             <legend>When to split</legend>
             <div>
-                <input type="radio" id="round" name="split" value="round" checked />
+                <input type="radio" id="round" name="split" value="round" />
                 <label for="round">After each round</label>
             </div>
             <div>
                 <input type="radio" id="seed" name="split" value="seed" />
                 <label for="seed">After each seed (5 locations)</label>
             </div>
-            <!-- <div>
-                <input type="checkbox" id="only-on-5k" value="only-on-5k" />
-                <label for="only-on-5k">Only if the round was a 5k</label>
-            </div> -->
         </fieldset>
         <fieldset>
             <legend>When to reset</legend>
             <div>
-                <input type="checkbox" id="leave-game" value="leave-game" checked />
+                <input type="checkbox" id="leave-game" value="leave-game" />
                 <label for="leave-game">When clicking "Leave game"</label>
             </div>
-            <!-- <div>
+            <div>
                 <input type="checkbox" id="missed-loc" value="missed-loc" />
                 <label for="missed-loc">If missing a 5k</label>
-            </div> -->
+            </div>
         </fieldset>
+
+        <hr class="solid">
+
         <button type="submit">Save settings</button>
         <button type="reset">Reset defaults</button>
         <br>
         <div id="save-success">&#10004; Saved settings successfully</div>
     </form>
+
     <script type="application/javascript" src="../polyfill/browser-polyfill.js"></script>
     <script type="application/javascript" src="settings.js"></script>
 </body>

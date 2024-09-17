@@ -1,6 +1,6 @@
 # Geoguessr Autosplitter
 
-Geoguessr Autosplitter is a browser extension which connects to a local LiveSplit Server using WebSockets to perform automatic actions (starting run, splitting, pausing game time, etc.) 
+Geoguessr Autosplitter is a browser extension which connects to a local LiveSplit Server using WebSockets to perform automatic actions (starting run, splitting, pausing game time, resetting, etc.) 
 
 ### Warning
 
@@ -17,16 +17,16 @@ Current LiveSplit release does not embed a WebSockets server yet, you may downlo
 
 **Note:** The extension is only enabled on geoguessr tabs. On any other tab it will be displayed with its default logo, with no background status.
 
+**Note:** You may pin the taskbar icon to your taskbar for easier tracking of your connection status.
+
 Once the extension is installed :
 - Right Click on LiveSplit > Control > Start WebSocket server (by default, will start on ws://localhost:16834/livesplit) 
-- Refresh your geoguessr page
+- Setup your preferences by clicking the extension logo
+- Enable the extension in the extension settings
 
-If the connection succeded, the taskbar icon should have a green background. This means that you're connected to your livesplit instance, woohoo!
-Note: you may pin the taskbar icon to your taskbar for easier tracking of your connection status.
+If the connection succeeded, the taskbar icon should have a green background. This means that you're connected to your livesplit instance, woohoo!
 
 Now, if you start a game or challenge, the timer should automatically start.
-
-An options tab exists if you click on the extension taskbar icon, allowing to set your livesplit port and split options.
 
 Default livesplit comparison is set to In Game time. The Livesplit comparison setting will set your LiveSplit comparison at run start.
 

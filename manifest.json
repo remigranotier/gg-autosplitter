@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "GeoGuessr Autosplitter",
-    "version": "0.3.0",
+    "version": "1.0.0",
     "description": "Browser extension which connects to a local LiveSplit Server using WebSockets to perform automatic actions",
     "icons": {
         "48": "icons/logo-48.png"
