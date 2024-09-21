@@ -1,7 +1,7 @@
 // Selector of score field
 const scoreFieldSelector = "[class^=round-result_pointsIndicatorWrapper]";
 
-const gameMapSelector = "[class^=game_guessMap]";
+const gameMapSelector = "[class^=game_canvas]";
 
 // Execute this function when score field is detected
 function handleScoreAppearance(score_field) {
@@ -28,7 +28,9 @@ function handleScoreAppearance(score_field) {
 // Observer config
 const observer = new MutationObserver((mutationsList, observer) => {
     const score_field = document.querySelector(scoreFieldSelector);
+    console.debug("Watching for score appearance");
     if (score_field) {
+        console.debug("score field detected");
         handleScoreAppearance(score_field);
         observer.disconnect();
     }
@@ -36,6 +38,7 @@ const observer = new MutationObserver((mutationsList, observer) => {
 
 // Send message through websocket
 function send_ws(operation) {
+    console.debug("Sending command to BG : " + operation)
     browser.runtime.sendMessage({ type: "livesplit_command", command: operation });
 }
 
@@ -99,3 +102,9 @@ document.body.onkeyup = function (e) {
         }
     }
 }
+
+// Keep extension alive
+function keepAlive() {
+    browser.runtime.sendMessage({ type: "keep_alive" });
+}
+setInterval(keepAlive, 20000);

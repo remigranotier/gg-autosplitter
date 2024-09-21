@@ -50,7 +50,7 @@ function restoreOptions() {
 
 // Action to perform when visually setting values of form
 function setCurrentSettings(result) {
-    if (result.split == null) {
+    if (result.split == null || result.comparison == null) {
         // First activation
         resetOptions(null);
         return;

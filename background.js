@@ -13,6 +13,9 @@ browser.runtime.onMessage.addListener(message_listener);
 
 function message_listener(message) {
     switch (message.type) {
+        case "keep_alive":
+            // Ignore     
+            break;
         case "settings_update":
             update_settings();
             break;
