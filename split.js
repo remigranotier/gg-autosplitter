@@ -54,7 +54,7 @@ function is_last_round() {
 
 function guess() {
     // observe score field when guessing
-    observer.observe(document.querySelector(gameMapSelector), { subtree: true, attributes: true });
+    observer.observe(document.querySelector(gameMapSelector), { subtree: true, attributes: true, childList: true });
     send_ws("pausegametime");
 }
 
@@ -66,13 +66,30 @@ function reset_leave_game() {
     send_ws("reset_leave_game");
 }
 
+
+function is_start_button(target) {
+    // Start button of Solo mode
+    var playButtons = document.querySelector("[class^=map-selector-mobile_playButtons]");
+    if (playButtons == null) {
+        playButtons = document.querySelector("[class^=map-selector_playButtons]");
+    }
+    if (target.textContent == "Play" && playButtons.contains(target)) {
+        return true;
+    }
+
+    // Start button of Challenge mode
+    if (start_list.includes(target.dataset.qa) && target.textContent != "Create challenge") {
+        return true;
+    }
+}
+
 let start_list = ['join-challenge-button', 'start-challenge-button', 'start-game-button', 'play-again-button'];
 let guess_list = ['perform-guess'];
 let next_list = ['close-round-result'];
 
 // Event button listener
 document.addEventListener('click', function (e) {
-    if (e.target && start_list.includes(e.target.dataset.qa)) {
+    if (e.target && is_start_button(e.target)) {
         start();
     }
     if (e.target && guess_list.includes(e.target.dataset.qa)) {
