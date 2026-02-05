@@ -2,6 +2,7 @@
 const scoreFieldSelector = "[class^=round-result_pointsIndicatorWrapper]";
 
 const gameMapSelector = "[class^=game_canvas]";
+let guessed = false;
 
 // Execute this function when score field is detected
 function handleScoreAppearance(score_field) {
@@ -39,10 +40,11 @@ const observer = new MutationObserver((mutationsList, observer) => {
 // Send message through websocket
 function send_ws(operation) {
     console.debug("Sending command to BG : " + operation)
-    browser.runtime.sendMessage({ type: "livesplit_command", command: operation });
+    chrome.runtime.sendMessage({ type: "livesplit_command", command: operation });
 }
 
 function start() {
+    setTimeout(() => { guessed = false }, 500)
     send_ws("start");
     send_ws("set_comparison");
     send_ws("unpausegametime"); // For a second seed, game time might be paused
@@ -55,14 +57,17 @@ function is_last_round() {
 function guess() {
     // observe score field when guessing
     observer.observe(document.querySelector(gameMapSelector), { subtree: true, attributes: true, childList: true });
+    guessed = true
     send_ws("pausegametime");
 }
 
 function next() {
+    setTimeout(() => { guessed = false }, 500)
     send_ws("unpausegametime");
 }
 
 function reset_leave_game() {
+    setTimeout(() => { guessed = false }, 500)
     send_ws("reset_leave_game");
 }
 
@@ -109,19 +114,45 @@ document.body.onkeyup = function (e) {
         e.code == "Space" ||
         e.keyCode == 32
     ) {
-        let guess_button = document.querySelector("button[data-qa='perform-guess']");
-        if (!guess_button) {
-            console.debug("Spacebar pressed with no guess button, ignoring");
+        checkSpaceGuess()
+        checkSpaceStart()
+    }
+}
+
+function checkSpaceGuess() {
+    let guess_button = document.querySelector("button[data-qa='perform-guess']");
+    if (!guess_button) {
+        console.debug("Spacebar pressed with no guess button, ignoring");
+        return;
+    }
+    if (!guess_button.disabled) {
+        guess();
+    }
+}
+
+function checkSpaceStart() {
+    for (playButton of document.querySelectorAll("[class^=map-selector_playButtons]")) {
+        console.debug(localStorage.getItem("quickplay-variant"))
+        if (playButton.textContent === "Play" && localStorage.getItem("quickplay-variant") == 0) {
+            console.debug("Starting with space in solo")
+            start();
             return;
-        }
-        if (!guess_button.disabled) {
-            guess();
         }
     }
 }
 
+function checkTimerEnd() {
+    timer = document.querySelector("[class^=clock-timer_timer__]")
+    if (timer && timer.textContent === "00:00" && !guessed) {
+        console.debug("end of timer detected")
+        guess()
+    }
+}
+
+setInterval(checkTimerEnd, 100)
+
 // Keep extension alive
 function keepAlive() {
-    browser.runtime.sendMessage({ type: "keep_alive" });
+    chrome.runtime.sendMessage({ type: "keep_alive" });
 }
 setInterval(keepAlive, 20000);

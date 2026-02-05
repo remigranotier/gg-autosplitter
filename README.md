@@ -1,10 +1,8 @@
 # Geoguessr Autosplitter
 
-Geoguessr Autosplitter is a browser extension which connects to a local LiveSplit Server using WebSockets to perform automatic actions (starting run, splitting, pausing game time, resetting, etc.) 
+Geoguessr Autosplitter is a browser extension which connects to a local LiveSplit Server using WebSockets to perform automatic actions (starting run, splitting, pausing game time, resetting, etc.).
 
-### Warning
-
-Current LiveSplit release does not embed a WebSockets server yet, you may download the dev build [here](https://raw.githubusercontent.com/LiveSplit/LiveSplit.github.io/artifacts/LiveSplitDevBuild.zip)
+**This extension depends (for now) on English language on geoguessr to work properly.**
 
 ## How to use it
 

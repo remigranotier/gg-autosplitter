@@ -7,7 +7,7 @@ function saveOptions(e) {
     var reset_leave_game = document.querySelector("#leave-game").checked;
     var reset_missed_loc = document.querySelector("#missed-loc").checked;
     var extension_activation = document.querySelector("#extension-enabled").checked;
-    browser.storage.sync.set({
+    chrome.storage.sync.set({
         port: port,
         split: split,
         comparison: comparison,
@@ -16,7 +16,7 @@ function saveOptions(e) {
         extension_activation: extension_activation
     }).then(saveSuccessful, onError);
 
-    browser.runtime.sendMessage({ type: "settings_update" });
+    chrome.runtime.sendMessage({ type: "settings_update" });
 }
 
 // Action when save went successfully
@@ -26,7 +26,7 @@ function saveSuccessful() {
 
 // Action to perform to reset options in storage
 function resetOptions(_e) {
-    browser.storage.sync.set({
+    chrome.storage.sync.set({
         port: 16834,
         split: "round",
         comparison: "gametime",
@@ -44,7 +44,7 @@ function resetSaveStatus() {
 // Action to perform when menu is clicked/displayed
 function restoreOptions() {
     resetSaveStatus();
-    let getting = browser.storage.sync.get();
+    let getting = chrome.storage.sync.get();
     getting.then(setCurrentSettings, onError);
 }
 
@@ -63,7 +63,7 @@ function setCurrentSettings(result) {
     document.querySelector("#missed-loc").checked = result.reset_missed_loc;
     document.querySelector("#extension-enabled").checked = result.extension_activation;
 
-    browser.runtime.sendMessage({ type: "settings_update" });
+    chrome.runtime.sendMessage({ type: "settings_update" });
 }
 
 function onError(error) {
@@ -80,10 +80,10 @@ var extension_activation = document.querySelector("#extension-enabled");
 
 extension_activation.addEventListener('change', function () {
     if (this.checked) {
-        browser.storage.sync.set({ extension_activation: true })
+        chrome.storage.sync.set({ extension_activation: true })
     } else {
-        browser.storage.sync.set({ extension_activation: false })
+        chrome.storage.sync.set({ extension_activation: false })
 
     }
-    browser.runtime.sendMessage({ type: "settings_update" });
+    chrome.runtime.sendMessage({ type: "settings_update" });
 });

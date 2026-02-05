@@ -5,11 +5,11 @@ var ws;
 
 // Update settings from browser storage
 function update_settings() {
-    settings = browser.storage.sync.get().then(onReceivedSettings, onErrorReceivingSettings);
+    settings = chrome.storage.sync.get().then(onReceivedSettings, onErrorReceivingSettings);
 }
 
 // Listener of content script messages
-browser.runtime.onMessage.addListener(message_listener);
+chrome.runtime.onMessage.addListener(message_listener);
 
 function message_listener(message) {
     switch (message.type) {
@@ -77,7 +77,7 @@ function onReceivedSettings(item) {
     if (item.port && parseInt(item.port)) {
         port = parseInt(item.port);
     } else {
-        console.debug("'port' setting is invalid, please provide a valid number");
+        console.warn("'port' setting is invalid, please provide a valid number. Falling back to 16384");
     }
     options.port = port;
     options.split_seed = (item.split == "seed");
@@ -141,29 +141,29 @@ var activated_extension = false;
 function set_icon() {
     // Set default icon
     if (ws == null || !activated_extension) {
-        browser.action.setIcon({ path: "icons/logo-48.png" });
+        chrome.action.setIcon({ path: "icons/logo-48.png" });
         return;
     }
 
     // If extension is activated
     if (ws && ws.readyState == WebSocket.OPEN) {
-        browser.action.setIcon({ path: "icons/connected-48.png" });
+        chrome.action.setIcon({ path: "icons/connected-48.png" });
     } else {
-        browser.action.setIcon({ path: "icons/disconnected-48.png" });
+        chrome.action.setIcon({ path: "icons/disconnected-48.png" });
     }
 }
 
 const contentScriptMatchArray = ['https://www.geoguessr.com'];
 
-browser.tabs.onActivated.addListener(handleExtensionActiveState);
+chrome.tabs.onActivated.addListener(handleExtensionActiveState);
 
-browser.tabs.onUpdated.addListener((_tabId, _changeInfo, tab) => {
+chrome.tabs.onUpdated.addListener((_tabId, _changeInfo, tab) => {
     handleExtensionActiveState(tab);
 });
 
 function handleExtensionActiveState(tabs) {
     if (tabs.tabId) {
-        browser.tabs.get(tabs.tabId).then((tab) => {
+        chrome.tabs.get(tabs.tabId).then((tab) => {
             checkWhiteListedOrigin(tab);
         });
     } else {

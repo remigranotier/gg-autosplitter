@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "GeoGuessr Autosplitter",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Browser extension which connects to a local LiveSplit Server using WebSockets to perform automatic actions",
     "icons": {
         "48": "icons/logo-48.png"
@@ -15,14 +15,12 @@
                 "*://*.geoguessr.com/*"
             ],
             "js": [
-                "polyfill/browser-polyfill.js",
                 "split.js"
             ]
         }
     ],
     "background": {
         "scripts": [
-            "polyfill/browser-polyfill.js",
             "background.js"
         ],
         "service_worker": "worker-wrapper.js"
