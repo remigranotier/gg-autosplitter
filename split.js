@@ -74,11 +74,17 @@ function reset_leave_game() {
 
 function is_start_button(target) {
     // Start button of Solo mode
-    var playButtons = document.querySelector("[class^=map-selector-mobile_playButtons]");
-    if (playButtons == null) {
-        playButtons = document.querySelector("[class^=map-selector_playButtons]");
+    var possibleQuerySelectors = ["[class^=map-selector-mobile_playButtons]", "[class^=map-selector_playButtons]", "[class^=play-bar_playButtons]"]
+    var playButtons = null
+    for (querySelector of possibleQuerySelectors) {
+        result = document.querySelector(querySelector);
+        if (result != null) {
+            playButtons = result
+            break
+        }
     }
-    if (target.textContent == "Play" && playButtons.contains(target)) {
+
+    if (playButtons != null && target.textContent == "Play" && playButtons.contains(target) && !localStorage.getItem("quickplay-playtype")) {
         return true;
     }
 
@@ -131,9 +137,8 @@ function checkSpaceGuess() {
 }
 
 function checkSpaceStart() {
-    for (playButton of document.querySelectorAll("[class^=map-selector_playButtons]")) {
-        console.debug(localStorage.getItem("quickplay-variant"))
-        if (playButton.textContent === "Play" && localStorage.getItem("quickplay-variant") == 0) {
+    for (playButton of document.querySelectorAll("[class^=play-bar_playButtons]")) {
+        if (playButton.textContent === "Play" && !localStorage.getItem("quickplay-playtype")) {
             console.debug("Starting with space in solo")
             start();
             return;
