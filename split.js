@@ -119,10 +119,19 @@ document.body.onkeyup = function (e) {
         checkSpaceStart()
     }
 
+    var script_value = JSON.parse(document.querySelector("#__NEXT_DATA__").textContent)
+    var playerId = ""
+
+    try {
+        playerId = script_value["props"]["accountProps"]["account"]["user"]["userId"]
+    } catch {
+        console.error("no user id found in DOM, fallback to first keybindings object")
+    }
 
     var primaryActionKeybind = ["Space"]
     try {
-        primaryActionKeybind = JSON.parse(Object.entries(localStorage).find(entry => entry[0].startsWith("__GEOGUESSR_KEY_BINDINGS__"))[1])["bindings"]["primaryAction"]
+        const keybindings = Object.entries(localStorage).find(entry => entry[0].startsWith(`__GEOGUESSR_KEY_BINDINGS__${playerId}`))
+        primaryActionKeybind = JSON.parse(keybindings[1])["bindings"]["primaryAction"]
     } catch {
         console.warn("Could not find keybinds, will default to spacebar")
     }
