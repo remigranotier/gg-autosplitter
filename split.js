@@ -50,10 +50,6 @@ function start() {
     send_ws("unpausegametime"); // For a second seed, game time might be paused
 }
 
-function is_last_round() {
-    return document.querySelector("div[data-qa='round-number']").textContent.includes("5 / 5");
-}
-
 function guess() {
     // observe score field when guessing
     observer.observe(document.querySelector(gameMapSelector), { subtree: true, attributes: true, childList: true });
