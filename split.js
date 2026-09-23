@@ -110,21 +110,33 @@ document.addEventListener('click', function (e) {
     }
 });
 
-// Space bar listener
+// Keys listener
 document.body.onkeyup = function (e) {
     if (e.key == " " ||
         e.code == "Space" ||
         e.keyCode == 32
     ) {
-        checkSpaceGuess()
         checkSpaceStart()
+    }
+
+
+    var primaryActionKeybind = ["Space"]
+    try {
+        primaryActionKeybind = JSON.parse(Object.entries(localStorage).find(entry => entry[0].startsWith("__GEOGUESSR_KEY_BINDINGS__"))[1])["bindings"]["primaryAction"]
+    } catch {
+        console.warn("Could not find keybinds, will default to spacebar")
+    }
+
+    if (primaryActionKeybind.includes(e.code) || (e.shiftKey && primaryActionKeybind.includes(`Shift+${e.code}`)) || (e.ctrlKey && primaryActionKeybind.includes(`Ctrl+${e.code}`))) {
+        checkKeyboardGuess()
     }
 }
 
-function checkSpaceGuess() {
+
+function checkKeyboardGuess() {
     let guess_button = document.querySelector("button[data-qa='perform-guess']");
     if (!guess_button) {
-        console.debug("Spacebar pressed with no guess button, ignoring");
+        console.debug("Primary action button pressed with no guess button, ignoring");
         return;
     }
     if (!guess_button.disabled) {
