@@ -8,8 +8,8 @@ let guessed = false;
 function handleScoreAppearance(score_field) {
     // Without a timeout we get 0 cause score is not set yet
     setTimeout(() => {
-        score = score_field.children[0].textContent;
-        close_round_btn = document.querySelector("button[data-qa='close-round-result']").textContent;
+        let score = score_field.textContent;
+        let close_round_btn = document.querySelector("button[data-qa='close-round-result']").textContent;
         if (score == "5,000") {
             if (close_round_btn == "Next") {
                 send_ws("perfect_score_intermediate");
@@ -70,10 +70,10 @@ function reset_leave_game() {
 
 function is_start_button(target) {
     // Start button of Solo mode
-    var possibleQuerySelectors = ["[class^=map-selector-mobile_playButtons]", "[class^=map-selector_playButtons]", "[class^=play-bar_playButtons]"]
-    var playButtons = null
-    for (querySelector of possibleQuerySelectors) {
-        result = document.querySelector(querySelector);
+    let possibleQuerySelectors = ["[class^=map-selector-mobile_playButtons]", "[class^=map-selector_playButtons]", "[class^=play-bar_playButtons]"]
+    let playButtons = null
+    for (let querySelector of possibleQuerySelectors) {
+        let result = document.querySelector(querySelector);
         if (result != null) {
             playButtons = result
             break
@@ -85,27 +85,27 @@ function is_start_button(target) {
     }
 
     // Start button of Challenge mode
-    if (start_list.includes(target.dataset.qa) && target.textContent != "Create challenge") {
+    if (start_list.has(target.dataset.qa) && target.textContent != "Create challenge") {
         return true;
     }
 }
 
-let start_list = ['join-challenge-button', 'start-challenge-button', 'start-game-button', 'play-again-button'];
-let guess_list = ['perform-guess'];
-let next_list = ['close-round-result'];
+let start_list = new Set(['join-challenge-button', 'start-challenge-button', 'start-game-button', 'play-again-button']);
+let guess_list = new Set(['perform-guess']);
+let next_list = new Set(['close-round-result']);
 
 // Event button listener
 document.addEventListener('click', function (e) {
     if (e.target && is_start_button(e.target)) {
         start();
     }
-    if (e.target && guess_list.includes(e.target.dataset.qa)) {
+    if (e.target && guess_list.has(e.target.dataset.qa)) {
         guess();
     }
-    if (e.target && next_list.includes(e.target.dataset.qa) && e.target.textContent == "Next") {
+    if (e.target && next_list.has(e.target.dataset.qa) && e.target.textContent == "Next") {
         next();
     }
-    if (e.target && e.target.textContent == "Leave game") {
+    if (e.target?.textContent == "Leave game") {
         reset_leave_game();
     }
 });
@@ -119,8 +119,8 @@ document.body.onkeyup = function (e) {
         checkSpaceStart()
     }
 
-    var script_value = JSON.parse(document.querySelector("#__NEXT_DATA__").textContent)
-    var playerId = ""
+    let script_value = JSON.parse(document.querySelector("#__NEXT_DATA__").textContent)
+    let playerId = ""
 
     try {
         playerId = script_value["props"]["accountProps"]["account"]["user"]["userId"]
@@ -128,7 +128,7 @@ document.body.onkeyup = function (e) {
         console.error("no user id found in DOM, fallback to first keybindings object")
     }
 
-    var primaryActionKeybind = ["Space"]
+    let primaryActionKeybind = ["Space"]
     try {
         const keybindings = Object.entries(localStorage).find(entry => entry[0].startsWith(`__GEOGUESSR_KEY_BINDINGS__${playerId}`))
         primaryActionKeybind = JSON.parse(keybindings[1])["bindings"]["primaryAction"]
@@ -154,7 +154,7 @@ function checkKeyboardGuess() {
 }
 
 function checkSpaceStart() {
-    for (playButton of document.querySelectorAll("[class^=play-bar_playButtons]")) {
+    for (let playButton of document.querySelectorAll("[class^=play-bar_playButtons]")) {
         if (playButton.textContent === "Play" && !localStorage.getItem("quickplay-playtype")) {
             console.debug("Starting with space in solo")
             start();
@@ -164,8 +164,8 @@ function checkSpaceStart() {
 }
 
 function checkTimerEnd() {
-    timer = document.querySelector("[class^=clock-timer_timer__]")
-    if (timer && timer.textContent === "00:00" && !guessed) {
+    let timer = document.querySelector("[class^=clock-timer_timer__]")
+    if (timer?.textContent === "00:00" && !guessed) {
         console.debug("end of timer detected")
         guess()
     }
