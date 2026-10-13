@@ -1,5 +1,5 @@
 // Selector of score field
-const scoreFieldSelector = "[class^=round-result_pointsIndicatorWrapper]";
+const scoreFieldSelector = "[class^=game-bottom-bar_statValue__gez0v]";
 
 const gameMapSelector = "[class^=game_canvas]";
 let guessed = false;
