@@ -1,14 +1,10 @@
-// Selector of score field
-const scoreFieldSelector = "[class^=game-bottom-bar_statValue__gez0v]";
-
 const gameMapSelector = "[class^=game_canvas]";
 let guessed = false;
 
 // Execute this function when score field is detected
-function handleScoreAppearance(score_field) {
+function handleScoreAppearance(score) {
     // Without a timeout we get 0 cause score is not set yet
     setTimeout(() => {
-        let score = score_field.textContent;
         let close_round_btn = document.querySelector("button[data-qa='close-round-result']").textContent;
         if (score == "5,000") {
             if (close_round_btn == "Next") {
@@ -26,13 +22,26 @@ function handleScoreAppearance(score_field) {
     }, 1);
 }
 
+function findScore() {
+    let statEntries = document.querySelectorAll("[class^=game-bottom-bar_stat__]")
+    if (!statEntries) {
+        return undefined
+    }
+    for (let entry of statEntries) {
+        if (entry.children[0].textContent == 'Score') {
+            return entry.children[1].textContent
+        }
+    }
+    return undefined
+}
+
 // Observer config
 const observer = new MutationObserver((mutationsList, observer) => {
-    const score_field = document.querySelector(scoreFieldSelector);
+    const score = findScore();
     console.debug("Watching for score appearance");
-    if (score_field) {
-        console.debug("score field detected");
-        handleScoreAppearance(score_field);
+    if (score !== undefined) {
+        console.debug("score detected");
+        handleScoreAppearance(score);
         observer.disconnect();
     }
 });
