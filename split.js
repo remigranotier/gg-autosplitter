@@ -1,4 +1,4 @@
-const gameMapSelector = "[class^=game_canvas]";
+const gameMapSelector = "[class^=_canvas_]";
 let guessed = false;
 
 // Execute this function when score field is detected
@@ -23,7 +23,7 @@ function handleScoreAppearance(score) {
 }
 
 function findScore() {
-    let statEntries = document.querySelectorAll("[class^=game-bottom-bar_stat__]")
+    let statEntries = document.querySelectorAll("[class^=_stat_]")
     if (!statEntries) {
         return undefined
     }
@@ -79,7 +79,7 @@ function reset_leave_game() {
 
 function is_start_button(target) {
     // Start button of Solo mode
-    let possibleQuerySelectors = ["[class^=map-selector-mobile_playButtons]", "[class^=map-selector_playButtons]", "[class^=play-bar_playButtons]"]
+    let possibleQuerySelectors = ["[class^=_playButtons_]"]
     let playButtons = null
     for (let querySelector of possibleQuerySelectors) {
         let result = document.querySelector(querySelector);
@@ -128,15 +128,6 @@ document.body.onkeyup = function (e) {
         checkSpaceStart()
     }
 
-    let script_value = JSON.parse(document.querySelector("#__NEXT_DATA__").textContent)
-    let playerId = ""
-
-    try {
-        playerId = script_value["props"]["accountProps"]["account"]["user"]["userId"]
-    } catch {
-        console.error("no user id found in DOM, fallback to first keybindings object")
-    }
-
     let primaryActionKeybind = ["Space"]
     try {
         const keybindings = Object.entries(localStorage).find(entry => entry[0].startsWith(`__GEOGUESSR_KEY_BINDINGS__${playerId}`))
@@ -163,7 +154,7 @@ function checkKeyboardGuess() {
 }
 
 function checkSpaceStart() {
-    for (let playButton of document.querySelectorAll("[class^=play-bar_playButtons]")) {
+    for (let playButton of document.querySelectorAll("[class^=_playButtons_]")) {
         if (playButton.textContent === "Play" && !localStorage.getItem("quickplay-playtype")) {
             console.debug("Starting with space in solo")
             start();
@@ -173,7 +164,7 @@ function checkSpaceStart() {
 }
 
 function checkTimerEnd() {
-    let timer = document.querySelector("[class^=clock-timer_timer__]")
+    let timer = document.querySelector("[class^=_time_]")
     if (timer?.textContent === "00:00" && !guessed) {
         console.debug("end of timer detected")
         guess()
